@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Production Report</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Ensure table cells are editable */
+        [contenteditable="true"]:focus {
+            outline: 2px solid #3b82f6; /* Blue ring on focus */
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4 font-sans antialiased">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-xl p-6 md:p-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">Daily Production Report</h1>
+
+        <!-- Header Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-gray-700">
+            <div>
+                <label for="reportDate" class="block text-sm font-medium text-gray-600">Date:</label>
+                <input type="date" id="reportDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div>
+                <label for="equipment" class="block text-sm font-medium text-gray-600">Equipment:</label>
+                <input type="text" id="equipment" placeholder="Enter Equipment Name" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+        </div>
+
+        <!-- Table Container for Horizontal Scrolling -->
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th rowspan="2" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">No</th>
+                        <th rowspan="2" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Drawing Name</th>
+                        <th rowspan="2" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Material</th>
+                        <th rowspan="2" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Item name</th>
+                        <th colspan="6" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Number of plates</th>
+                        <th colspan="6" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Manual inspection after cutting</th>
+                        <th colspan="6" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Error Content</th>
+                        <th colspan="3" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Confirmation</th>
+                    </tr>
+                    <tr>
+                        <!-- Number of plates sub-headers -->
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">①</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">②</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">③</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">④</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">⑤</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Total full plate</th>
+
+                        <!-- Manual inspection after cutting sub-headers -->
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Confirm Marking (OK/NG)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Top full plate (OK/NG)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Connect or plate (OK/NG)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Size (MM)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Connect or plate (MM)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Size (MM)</th>
+
+                        <!-- Error Content sub-headers -->
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Materials (Part)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Materials (Quan.)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Operating (Part)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Operating (Quan.)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Equipment (Part)</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Equipment (Quan.)</th>
+
+                        <!-- Confirmation sub-headers -->
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Operating</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200">Sub Leader</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Leader</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+            <button id="addRowBtn" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                Add Row
+            </button>
+            <button id="saveDataBtn" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                Save Data
+            </button>
+            <button id="loadDataBtn" class="px-6 py-3 bg-yellow-600 text-white font-semibold rounded-md shadow-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                Load Data
+            </button>
+            <button id="clearDataBtn" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                Clear All
+            </button>
+        </div>
+
+        <!-- Message Box -->
+        <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full text-center">
+                <p id="messageText" class="text-lg font-semibold text-gray-800 mb-4"></p>
+                <button id="closeMessageBox" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const reportTableBody = document.getElementById('reportTableBody');
+        const addRowBtn = document.getElementById('addRowBtn');
+        const saveDataBtn = document.getElementById('saveDataBtn');
+        const loadDataBtn = document.getElementById('loadDataBtn');
+        const clearDataBtn = document.getElementById('clearDataBtn');
+        const reportDateInput = document.getElementById('reportDate');
+        const equipmentInput = document.getElementById('equipment');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const closeMessageBox = document.getElementById('closeMessageBox');
+
+        let rowCount = 0; // To keep track of row numbers
+
+        // Function to display a custom message box
+        function showMessageBox(message) {
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden');
+            messageBox.classList.add('flex');
+        }
+
+        // Close message box
+        closeMessageBox.addEventListener('click', () => {
+            messageBox.classList.add('hidden');
+            messageBox.classList.remove('flex');
+        });
+
+        // Function to add a new row to the table
+        function addRow(data = {}) {
+            rowCount++;
+            const row = document.createElement('tr');
+            row.id = `row-${rowCount}`; // Unique ID for each row
+            row.classList.add('hover:bg-gray-50');
+
+            // Define the structure of the cells and their default values
+            // The order here must match the table headers
+            const cells = [
+                { type: 'text', value: rowCount, class: 'font-medium text-gray-900 border-r border-gray-200' }, // No
+                { type: 'text', value: data.drawingName || '', class: 'border-r border-gray-200' }, // Drawing Name
+                { type: 'text', value: data.material || '', class: 'border-r border-gray-200' }, // Material
+                { type: 'text', value: data.itemName || '', class: 'border-r border-gray-200' }, // Item name
+                // Number of plates (6 cells)
+                { type: 'number', value: data.numPlate1 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.numPlate2 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.numPlate3 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.numPlate4 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.numPlate5 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.totalFullPlate || '', class: 'text-center border-r border-gray-200' },
+                // Manual inspection after cutting (6 cells)
+                { type: 'text', value: data.confirmMarking || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.topFullPlate || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.connectOrPlate || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.sizeMM1 || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.connectOrPlateMM || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.sizeMM2 || '', class: 'text-center border-r border-gray-200' },
+                // Error Content (6 cells)
+                { type: 'text', value: data.materialsPart || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.materialsQuan || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.operatingPart || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.operatingQuan || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.equipmentPart || '', class: 'text-center border-r border-gray-200' },
+                { type: 'number', value: data.equipmentQuan || '', class: 'text-center border-r border-gray-200' },
+                // Confirmation (3 cells)
+                { type: 'text', value: data.confirmationOperating || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.subLeader || '', class: 'text-center border-r border-gray-200' },
+                { type: 'text', value: data.leader || '', class: 'text-center' }
+            ];
+
+            cells.forEach((cellInfo, index) => {
+                const td = document.createElement('td');
+                td.classList.add('px-4', 'py-2', 'whitespace-nowrap', 'text-sm', 'text-gray-700', 'border-b', 'border-gray-200', ...cellInfo.class.split(' '));
+
+                if (index === 0) { // 'No' column
+                    td.textContent = cellInfo.value;
+                } else {
+                    td.setAttribute('contenteditable', 'true');
+                    td.textContent = cellInfo.value;
+                    // Add input type validation for number fields
+                    if (cellInfo.type === 'number') {
+                        td.addEventListener('input', (e) => {
+                            // Allow empty string or valid numbers
+                            if (e.target.textContent.trim() === '' || !isNaN(Number(e.target.textContent))) {
+                                // Valid input
+                            } else {
+                                // Invalid input, revert to previous valid state or clear
+                                e.target.textContent = e.target.textContent.replace(/[^0-9.]/g, ''); // Remove non-numeric characters
+                                showMessageBox("Please enter only numbers in this field.");
+                            }
+                        });
+                    }
+                }
+                row.appendChild(td);
+            });
+
+            reportTableBody.appendChild(row);
+        }
+
+        // Add row button event listener
+        addRowBtn.addEventListener('click', () => addRow());
+
+        // Function to collect all data from the table
+        function collectTableData() {
+            const data = {
+                reportDate: reportDateInput.value,
+                equipment: equipmentInput.value,
+                rows: []
+            };
+
+            const rows = reportTableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = {
+                    no: cells[0].textContent.trim(),
+                    drawingName: cells[1].textContent.trim(),
+                    material: cells[2].textContent.trim(),
+                    itemName: cells[3].textContent.trim(),
+                    numPlate1: cells[4].textContent.trim(),
+                    numPlate2: cells[5].textContent.trim(),
+                    numPlate3: cells[6].textContent.trim(),
+                    numPlate4: cells[7].textContent.trim(),
+                    numPlate5: cells[8].textContent.trim(),
+                    totalFullPlate: cells[9].textContent.trim(),
+                    confirmMarking: cells[10].textContent.trim(),
+                    topFullPlate: cells[11].textContent.trim(),
+                    connectOrPlate: cells[12].textContent.trim(),
+                    sizeMM1: cells[13].textContent.trim(),
+                    connectOrPlateMM: cells[14].textContent.trim(),
+                    sizeMM2: cells[15].textContent.trim(),
+                    materialsPart: cells[16].textContent.trim(),
+                    materialsQuan: cells[17].textContent.trim(),
+                    operatingPart: cells[18].textContent.trim(),
+                    operatingQuan: cells[19].textContent.trim(),
+                    equipmentPart: cells[20].textContent.trim(),
+                    equipmentQuan: cells[21].textContent.trim(),
+                    confirmationOperating: cells[22].textContent.trim(),
+                    subLeader: cells[23].textContent.trim(),
+                    leader: cells[24].textContent.trim()
+                };
+                data.rows.push(rowData);
+            });
+            return data;
+        }
+
+        // Save data to Local Storage
+        saveDataBtn.addEventListener('click', () => {
+            const data = collectTableData();
+            try {
+                localStorage.setItem('dailyProductionReportData', JSON.stringify(data));
+                showMessageBox('Data saved successfully!');
+            } catch (e) {
+                showMessageBox('Failed to save data. Local storage might be full or unavailable.');
+                console.error("Error saving data to local storage:", e);
+            }
+        });
+
+        // Load data from Local Storage
+        loadDataBtn.addEventListener('click', () => {
+            try {
+                const savedData = localStorage.getItem('dailyProductionReportData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    reportDateInput.value = data.reportDate || '';
+                    equipmentInput.value = data.equipment || '';
+
+                    // Clear existing rows before loading
+                    reportTableBody.innerHTML = '';
+                    rowCount = 0; // Reset row count
+
+                    data.rows.forEach(rowData => addRow(rowData));
+                    showMessageBox('Data loaded successfully!');
+                } else {
+                    showMessageBox('No saved data found.');
+                }
+            } catch (e) {
+                showMessageBox('Failed to load data. Data might be corrupted or unavailable.');
+                console.error("Error loading data from local storage:", e);
+            }
+        });
+
+        // Clear all data
+        clearDataBtn.addEventListener('click', () => {
+            reportTableBody.innerHTML = '';
+            reportDateInput.value = '';
+            equipmentInput.value = '';
+            rowCount = 0; // Reset row count
+            localStorage.removeItem('dailyProductionReportData'); // Clear from local storage
+            showMessageBox('All data cleared!');
+        });
+
+        // Initialize with a few empty rows on load
+        window.onload = () => {
+            // Set current date as default for the date input
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const dd = String(today.getDate()).padStart(2, '0');
+            reportDateInput.value = `${yyyy}-${mm}-${dd}`;
+
+            // Add initial rows if no data is loaded
+            if (!localStorage.getItem('dailyProductionReportData')) {
+                for (let i = 0; i < 5; i++) {
+                    addRow();
+                }
+            } else {
+                // Attempt to load data if available
+                loadDataBtn.click(); // Simulate click to load data on page load
+            }
+        };
+    </script>
+</body>
+</html>
